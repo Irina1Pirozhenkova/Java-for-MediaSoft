@@ -1,0 +1,17 @@
+@startuml
+actor User as "Пользователь"
+participant WebApp as "Веб-приложение"
+participant AuthService as "Сервис аутентификации"
+database UserDB as "База данных\nпользователей"
+
+User -> WebApp : вводит логин/пароль
+WebApp -> AuthService : отправляет учётные данные
+AuthService -> UserDB : SELECT * FROM users\nWHERE username = …
+UserDB --> AuthService : возвращает запись пользователя
+AuthService --> WebApp : {"status":"OK"} или {"status":"FAIL"}
+alt успешная аутентификация
+  WebApp --> User : показывает главную страницу
+else ошибка входа
+  WebApp --> User : показывает сообщение об ошибке
+end
+@enduml
